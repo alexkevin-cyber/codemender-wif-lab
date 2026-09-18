@@ -153,14 +153,7 @@ jobs:
       - name: CodeMender Scan
         id: scan
         run: |
-          # FIXME 2: This command is missing its flags. Replace FLAGS_GO_HERE
-          #   using the flag table in the codelab. You need two things:
-          #     1. run without asking the user to confirm anything
-          #     2. pin the model to $CM_MODEL
-          #
-          #   Note what you do not need. The agent is already scoped to the
-          #   whole repository by project_paths above, so there is no reason to
-          #   switch the sandbox off here.
+         
           cm find "$SCAN_PATH" -y --model "$CM_MODEL" 2>&1 | tee "$RUNNER_TEMP/cm-find.cm.log"
 
       # Re-emit the findings as JSON for the triage script. This is a separate
@@ -227,20 +220,9 @@ jobs:
             fi
 
             echo "::group::Fix $FID"
-            # FIXME 3: Replace FLAGS_GO_HERE. The cm verify call above is a
-            #   worked example, and this command takes exactly the same flags
-            #   for exactly the same reasons.
-            #
-            #   The rule worth remembering: any cm command that lets the agent
-            #   run commands or write files needs both -y and --bypass-warning.
-            #   That is verify and fix. cm find in FIXME 2 does not, because a
-            #   scan is read-only: FIND mode has those tools switched off, so
-            #   the warning never triggers.
-            #
-            #   Do not add --unrestricted. project_paths already gave the agent
-            #   this whole repository.
+           
             cm fix "$FID" -y --bypass-warning --model "$CM_MODEL" 2>&1 | tee "$RUNNER_TEMP/fix-$FID.cm.log" || true
-            
+
             # Safety net: if cm did not edit the files directly, recover the
             # patch from the log and apply it by hand.
             python3 .github/scripts/extract_cm_diff.py \
