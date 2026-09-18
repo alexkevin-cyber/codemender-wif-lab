@@ -29,7 +29,8 @@ on:
 # What this workflow is allowed to do to your repository.
 permissions:
   contents: write          # push the remediation branch
-  pull-requests: write     # open the autonomous remediation PR
+  pull-requests: write 
+  id-token: write    # open the autonomous remediation PR
   #
   # FIXME 1: One permission is missing, and it is the one that makes keyless
   #   authentication possible. Without it GitHub refuses to mint the OIDC
